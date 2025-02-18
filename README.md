@@ -168,7 +168,7 @@ fortnite_project/
 └── README.md                # Este arquivo
 ```
 
-## 6. Instalação de Dependências (com Poetry): Equipando-se para a Batalha! 🛡️
+## 6. Instalação de Dependências: Equipando-se para a Batalha! 🛡️
 
 1.  **Instale Poetry:**
 
