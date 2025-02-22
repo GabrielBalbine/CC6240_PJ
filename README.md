@@ -2,6 +2,19 @@
 
 Boas-vindas ao projeto **Fortnite Simplified**! Prepare-se para construir, saquear e... *programar*! 🚀
 
+## O Que é Este Projeto? 🤔
+
+Este projeto é como um "mini-Fortnite" que roda nos bastidores (o que chamamos de *backend*). Ele *não* tem a parte visual do jogo (os gráficos, a jogabilidade), mas sim a parte que lida com coisas como:
+
+*   A loja de itens (onde você compraria skins, picaretas, etc.).
+*   O seu inventário (onde ficam guardados os itens que você tem).
+*   O Passe de Batalha (aquele sistema que te dá recompensas por jogar).
+*   Os desafios diários e semanais.
+
+A ideia principal é aprender como construir sistemas de software usando diferentes tipos de bancos de dados e um sistema de mensagens (como se fosse um "WhatsApp" para os diferentes pedaços do programa se comunicarem).
+
+**Importante:** Este projeto é *educacional*. Ele não é um jogo completo, e não tem a intenção de ser usado por jogadores de verdade. É para *desenvolvedores* (ou quem quer aprender a ser um) aprenderem na prática!
+
 Este é um projeto *educacional* que explora conceitos de desenvolvimento de software usando elementos do famoso jogo Fortnite como inspiração. Mas atenção: **não vamos implementar a jogabilidade Battle Royale aqui!** 🚫 Nosso foco é o *backend*, usando tecnologias modernas para criar um sistema simplificado que lida com:
 
 *   🛍️ Loja de Itens (Skins, Picaretas, Emotes e mais!)
