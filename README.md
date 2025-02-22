@@ -1,5 +1,6 @@
 # ⛏️ Fortnite: Projeto de Persistência Poliglota e Mensageria 🦙
 
+
 Boas-vindas ao projeto **Fortnite Simplified**! Prepare-se para construir, saquear e... *programar*! 🚀
 
 ## O Que é Este Projeto? 🤔
@@ -41,6 +42,7 @@ Este é um projeto *educacional* que explora conceitos de desenvolvimento de sof
     *   `confluent-kafka`: Cliente Kafka para Python.
     *   `uvicorn`: Servidor ASGI para executar a API FastAPI.
     *   `pydantic`: Validação de dados e configurações.
+    *    `logging`: Para gerar logs detalhados.
 
 ## 2. Arquitetura: Construindo Nossa Base! 🧱
 
@@ -62,12 +64,11 @@ Estes serviços são o coração da nossa lógica.  Eles *produzem* mensagens qu
 
 ### 2.3. Serviço de Validação/Logs (S3 - Consumidor): O Inspetor 🕵️‍♀️
 
-*   (Não implementado neste exemplo simplificado, mas importante no *conceito*!)
-*   Este serviço seria como um *auditor*, verificando se tudo está em ordem.
-*   Ele *consome* todas as mensagens do Kafka.
-*   Confere se os dados estão consistentes entre os diferentes bancos de dados.
-*   Registra tudo em logs detalhados (para análise e *debugging*).
-*   Poderia até enviar os dados para o Elasticsearch para buscas e visualizações incríveis!
+*    `validation_service`: Este serviço é o nosso *detetive particular* e *guarda-costas* dos dados!
+    *   Ele *ouve* todas as mensagens que circulam no Kafka (como um espião!).
+    *   Verifica se os dados em todos os bancos de dados estão *certinhos* e *consistentes* (como um detetive procurando pistas!).
+    *   Registra *tudo* em logs detalhados (para podermos investigar qualquer problema!).
+    *   *Poderia* (em um projeto mais avançado) enviar os logs para o Elasticsearch para fazermos buscas e análises super detalhadas.
 
 ### 2.4. API (FastAPI): A Interface Amigável 🤝
 
@@ -167,7 +168,7 @@ fortnite_project/
 │   │   ├── user_service.py  # Serviço para usuários (S1)
 │   │   ├── shop_service.py  # Serviço para a loja (S1)
 │   │   ├── message_consumer.py # Serviço consumidor (S2)
-│   │   └── ...
+│   │   └── validation_service.py # Serviço de validação e logs (S3)
 │   ├── core/                # Configurações e utilitários
 │   │   ├── __init__.py
 │   │   ├── config.py        # Configurações
@@ -181,7 +182,7 @@ fortnite_project/
 └── README.md                # Este arquivo
 ```
 
-## 6. Instalação de Dependências: Equipando-se para a Batalha! 🛡️
+## 6. Instalação de Dependências (com Poetry): Equipando-se para a Batalha! 🛡️
 
 1.  **Instale Poetry:**
 
@@ -211,13 +212,19 @@ fortnite_project/
 
     *   **PostgreSQL:** O script para criar as tabelas é executado *automaticamente* quando você inicia a API (graças a um evento `startup`).
 
-3.  **Inicie o Consumidor Kafka (S2):**
+3.  **Inicie os Consumidores Kafka (S2 e S3):**
 
-    Abra um terminal separado (e *ative o ambiente virtual* se você estiver usando um):
+    Abra *dois* terminais separados (e *ative o ambiente virtual* se você estiver usando um):
 
-    ```bash
-    python app/services/message_consumer.py
-    ```
+    *   **Terminal 1 (S2):**
+        ```bash
+        python app/services/message_consumer.py
+        ```
+
+    *   **Terminal 2 (S3):**
+        ```bash
+        python app/services/validation_service.py
+        ```
 
 4.  **Inicie a API (FastAPI):**
 
@@ -274,7 +281,7 @@ Você precisará criar *scripts* (em Python ou outra linguagem) para automatizar
 ## 9. Próximos Passos e Melhorias: Evoluindo o Projeto! 📈
 
 *   **Implementar os Serviços Restantes (S1):** Terminar a lógica dos serviços que ainda não foram completamente implementados.
-*   **Implementar o Serviço de Validação/Logs (S3):** Criar o serviço que monitora tudo e garante a consistência dos dados.
+*   **Implementar a Lógica de Validação do S3:** Adicionar a lógica de validação ao `validation_service.py`, conectando-se aos bancos de dados.
 *   **Tratamento de Erros Robusto:** Adicionar tratamento de erros adequado em *todos* os componentes (não apenas `print("Erro!")`).
 *   **Testes, Testes, Testes!:** Escrever testes *unitários* (para funções individuais) e de *integração* (para testar a interação entre os componentes).
 *   **Autenticação e Autorização:** Adicionar segurança à API (JWT, OAuth 2.0, etc.). *Nunca* armazene senhas em texto plano!
