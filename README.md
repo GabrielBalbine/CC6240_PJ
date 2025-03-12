@@ -1,153 +1,144 @@
-# ⛏️ Fortnite: Projeto de Persistência Poliglota e Mensageria 🦙
+# ⚔️ Elden Ring Simplified: Projeto de Persistência Poliglota e Mensageria 🛡️
 
+[![Elden Ring Logo](https://cdn11.bigcommerce.com/s-k0hjo2yyrq/images/stencil/1280x1280/products/1106/4307/Elden_Ring_Standard_Edition_Product_Banner__89855.1726738824.jpg?c=1)](https://www.eldenring.com/)
 
-Boas-vindas ao projeto **Fortnite Simplified**! Prepare-se para construir, saquear e... *programar*! 🚀
+Saudações, Maculado! Bem-vindo ao projeto **Elden Ring Simplified**! Prepare-se para explorar as Terras Intermédias... *mas sem morrer (muito)!* 😉
 
 ## O Que é Este Projeto? 🤔
 
-Este projeto é como um "mini-Fortnite" que roda nos bastidores (o que chamamos de *backend*). Ele *não* tem a parte visual do jogo (os gráficos, a jogabilidade), mas sim a parte que lida com coisas como:
+Este é um projeto *educacional* que usa elementos de Elden Ring para criar um sistema *backend* simplificado.  Imagine que você está construindo um "diário de bordo" para registrar o seu progresso no jogo, mas sem precisar programar a parte da luta em si.  Aqui, você vai:
 
-*   A loja de itens (onde você compraria skins, picaretas, etc.).
-*   O seu inventário (onde ficam guardados os itens que você tem).
-*   O Passe de Batalha (aquele sistema que te dá recompensas por jogar).
-*   Os desafios diários e semanais.
+*   Criar personagens.
+*   Registrar quais chefes (bosses) você derrotou.
+*   Anotar quais itens você encontrou e equipou.
+*   (Opcional) Acompanhar os níveis e atributos do seu personagem.
 
-A ideia principal é aprender como construir sistemas de software usando diferentes tipos de bancos de dados e um sistema de mensagens (como se fosse um "WhatsApp" para os diferentes pedaços do programa se comunicarem).
+A ideia principal é aprender como construir sistemas de software usando diferentes tipos de bancos de dados e um sistema de mensagens (como se fosse um "WhatsApp" para os diferentes pedaços do programa se comunicarem). É como aprender a forjar armas e armaduras, mas para *código*!
 
-**Importante:** Este projeto é *educacional*. Ele não é um jogo completo, e não tem a intenção de ser usado por jogadores de verdade. É para *desenvolvedores* (ou quem quer aprender a ser um) aprenderem na prática!
+**Importante:** Este projeto é para *desenvolvedores* (ou aspirantes a desenvolvedores) aprenderem na prática. Ele *não* é um jogo completo, e *não* tem a jogabilidade de Elden Ring.
 
-Este é um projeto *educacional* que explora conceitos de desenvolvimento de software usando elementos do famoso jogo Fortnite como inspiração. Mas atenção: **não vamos implementar a jogabilidade Battle Royale aqui!** 🚫 Nosso foco é o *backend*, usando tecnologias modernas para criar um sistema simplificado que lida com:
+## 1. Tecnologias Utilizadas: Seu Arsenal de Desenvolvimento! ⚒️
 
-*   🛍️ Loja de Itens (Skins, Picaretas, Emotes e mais!)
-*   🎒 Inventário do Jogador
-*   🏆 Passe de Batalha (versão simplificada)
-*   📅 Desafios Diários e Semanais
+*   **Linguagem Principal:** Python 🐍 (versátil como a Espada Reta!)
+*   **Bancos de Dados (onde guardamos nossos tesouros):**
+    *   PostgreSQL (Relacional): Para dados que precisam de estrutura e relacionamentos (personagens, chefes, itens...).
+    *   MongoDB (Documento): Para dados mais flexíveis, como descrições detalhadas de chefes e itens.
+    *   Cassandra (Wide-Column): Para dados que precisam de acesso *super rápido* e podem crescer *muito*, como logs de eventos.
+*   **Mensageria (nosso "corcel espectral" para transportar dados):** Kafka 🐎
+*   **API (a "graça" que nos permite interagir com o sistema):** FastAPI ✨
+*   **Gerenciamento de Dependências:** Poetry (ou pip, se você preferir)
+*   **Containerização (tudo organizado em "frascos"):** Docker e Docker Compose 🏺
 
-## 1. Tecnologias Utilizadas: Uma Mochila Cheia de Ferramentas! 🛠️
-
-*   **Linguagem Principal:** Python 🐍 (versátil como um bom construtor!)
-*   **Bancos de Dados (nosso "loot"):**
-    *   PostgreSQL (Relacional): Para dados que precisam de estrutura e relacionamentos fortes.
-    *   MongoDB (Documento): Para dados mais flexíveis, como a rotação da loja diária!
-    *   Cassandra (Wide-Column): Para aqueles dados que precisam de acesso rápido e escalabilidade, como estatísticas de itens!
-*   **Mensageria (o "ônibus de batalha" dos dados):** Kafka 🚌
-*   **API (a "plataforma de lançamento" para interagir com o sistema):** FastAPI 🚀
-*   **Gerenciamento de Dependências:** Poetry (ou pip, se preferir)
-*   **Containerização (tudo organizado em "baús"):** Docker e Docker Compose 🐳
-
-*   **Bibliotecas Python (nossas "armas"):**
+*   **Bibliotecas Python (nossas "magias"):**
     *   `psycopg2-binary`: Conexão com PostgreSQL.
     *   `pymongo`: Conexão com MongoDB.
     *   `cassandra-driver`: Conexão com Cassandra.
     *   `confluent-kafka`: Cliente Kafka para Python.
     *   `uvicorn`: Servidor ASGI para executar a API FastAPI.
     *   `pydantic`: Validação de dados e configurações.
-    *    `logging`: Para gerar logs detalhados.
+    *   `logging`: Para gerar logs detalhados.
 
-## 2. Arquitetura: Construindo Nossa Base! 🧱
+## 2. Arquitetura: O Mapa das Terras Intermédias (do Código)! 🗺️
 
-Nosso projeto segue o estilo de arquitetura de *microserviços*, o que significa que temos vários serviços independentes trabalhando juntos.  Pense neles como diferentes *locais de interesse* no mapa!
+Nosso projeto usa uma arquitetura de *microserviços*.  Isso significa que temos vários "pequenos programas" independentes trabalhando juntos. Pense neles como diferentes *áreas* do mapa de Elden Ring!
 
-### 2.1. Serviços (S1 - Produtores): Os Construtores 👷‍♀️👷‍♂️
+### 2.1. Serviços (S1 - Produtores): Os NPCs que Fazem as Coisas Acontecerem! 🧙‍♂️
 
-Estes serviços são o coração da nossa lógica.  Eles *produzem* mensagens que são enviadas para o Kafka (nosso sistema de mensageria).
+Esses serviços são o *coração* do nosso sistema. Eles realizam as ações principais e *produzem* mensagens que são enviadas para o Kafka.
 
-*   `user_service`: O "cartório" do jogo, onde os jogadores se registram.
-*   `shop_service`: A loja, onde a mágica (e as compras) acontecem!
-*   `inventory_service`: O "depósito" onde os jogadores guardam seus itens.
-*   `battlepass_service`: O gerente do Passe de Batalha, distribuindo as recompensas.
-*   `challenge_service`: O mestre dos desafios, sempre com novas tarefas.
+*   `user_service`: O "guardião" dos usuários, que cuida do registro e autenticação.
+*   `character_service`: O "criador de personagens", que permite criar e gerenciar seus personagens.
+*   `boss_service`: O "registrador de conquistas", que anota quais chefes você derrotou.
+*   `item_service`: O "mestre dos itens", que cuida do inventário e de equipar itens.
+*   `attribute_service`: O "distribuidor de atributos", que permite aumentar seus níveis (opcional).
 
-### 2.2. Serviço Consumidor (S2 - Consumidor/Processador): O Coletor 🎒
+### 2.2. Serviço Consumidor (S2 - Consumidor/Processador): O Mensageiro ✉️
 
-*   `message_consumer`: Este serviço fica de olho no Kafka, *consumindo* as mensagens e atualizando os bancos de dados de acordo.  Ele é como um jogador coletando recursos!
+*   `message_consumer`: Este serviço fica de olho no Kafka, *consumindo* as mensagens e atualizando os bancos de dados. Ele é como um mensageiro que entrega as notícias por todo o reino!
 
-### 2.3. Serviço de Validação/Logs (S3 - Consumidor): O Inspetor 🕵️‍♀️
+### 2.3. Serviço de Validação/Logs (S3 - Consumidor): O Escriba Real 📜
 
-*    `validation_service`: Este serviço é o nosso *detetive particular* e *guarda-costas* dos dados!
-    *   Ele *ouve* todas as mensagens que circulam no Kafka (como um espião!).
-    *   Verifica se os dados em todos os bancos de dados estão *certinhos* e *consistentes* (como um detetive procurando pistas!).
+*   `validation_service`: Este serviço é o nosso *historiador* e *inspetor de qualidade*!
+    *   Ele *ouve* atentamente todas as mensagens do Kafka.
+    *   Verifica se os dados em todos os bancos de dados estão *corretos* e *consistentes*.
     *   Registra *tudo* em logs detalhados (para podermos investigar qualquer problema!).
-    *   *Poderia* (em um projeto mais avançado) enviar os logs para o Elasticsearch para fazermos buscas e análises super detalhadas.
+    *   *Poderia* (em um projeto mais avançado) enviar os logs para o Elasticsearch para buscas e análises super detalhadas.
 
-### 2.4. API (FastAPI): A Interface Amigável 🤝
+### 2.4. API (FastAPI): A Grande Biblioteca de Raya Lucaria 📚
 
-*   A API é a *porta de entrada* para interagir com o nosso sistema.
-*   Ela oferece *endpoints* (URLs) que você pode acessar para realizar ações (criar usuário, comprar item, etc.).
+*   A API é a nossa *porta de entrada* para o sistema. É como a Grande Biblioteca, onde você pode encontrar informações e realizar ações.
+*   Ela oferece *endpoints* (URLs) que você acessa para fazer coisas como criar um personagem, registrar um chefe derrotado, etc.
 *   Usa o FastAPI, um framework Python moderno e *rápido*!
 *   E, claro, usa modelos Pydantic para garantir que os dados estejam sempre corretos.
 
-### 2.5. Bancos de Dados: Onde Guardamos o Loot! 💰
+### 2.5. Bancos de Dados: Onde Guardamos Nossos Tesouros! 💎
 
-#### 2.5.1. PostgreSQL (Relacional): O Cofre Seguro 🏦
+#### 2.5.1. PostgreSQL (Relacional): O Cofre Real 👑
 
 *   Aqui guardamos os dados que precisam de *estrutura* e *relacionamentos* fortes, como:
     *   `Usuarios`: Informações dos jogadores.
-    *   `Itens`: Detalhes dos itens da loja.
-    *   `Inventario`: O que cada jogador possui.
-    *   `PasseBatalha`: Informações sobre os Passes de Batalha.
-    *   `NiveisPasseBatalha`: As recompensas de cada nível.
-    *   `ProgressoPasseBatalha`: O progresso de cada jogador.
-    *   `Desafios`: Os desafios diários e semanais.
-    *   `ProgressoDesafio`: O progresso de cada jogador nos desafios.
+    *   `Personagens`: Detalhes dos seus personagens.
+    *   `Chefes`: Informações sobre os chefes do jogo.
+    *   `PersonagemChefe`: Quais chefes cada personagem derrotou.
+    *   `Itens`: Detalhes dos itens.
+    *   `Inventario`: Quais itens cada personagem possui.
+    *   `Atributos`: Os atributos do jogo (Força, Destreza, etc.)
+    *  `PersonagemAtributo`: Atributos do personagem.
 
-#### 2.5.2. MongoDB (Documento): A Mochila Flexível 🎒
+#### 2.5.2. MongoDB (Documento): A Biblioteca Flexível 📖
 
-*   Ideal para dados que podem mudar com o tempo, ou que não se encaixam perfeitamente em tabelas:
-    *   `LojaDiaria`: Os itens em destaque na loja (que mudam todo dia!).
-    *   `Eventos`: Informações sobre eventos especiais.
-    *   `Noticias`: Novidades e atualizações do jogo.
+*   Ideal para dados que podem ter informações adicionais ou que não se encaixam perfeitamente em tabelas:
+    *   `DescricoesChefes`: Descrições detalhadas dos chefes (com história, dicas, etc.).
+    *   `LoreItens` : Descrições mais aprofundadas sobre a história do item.
 
-#### 2.5.3. Cassandra (Wide-Column): O Armazém de Alta Performance 🏭
+#### 2.5.3. Cassandra (Wide-Column): O Arquivo de Alta Performance ⚡
 
-*   Perfeito para dados que precisam ser acessados *rapidamente* e que podem crescer *muito*:
-    *   `EstatisticasItens`: Quantas vezes cada item foi comprado, etc.
-    *   `EventosDeJogo`: Um registro de tudo que acontece (login, logout, compra, etc.).
-    *   `RankingPasseBatalha`: A classificação dos jogadores no Passe de Batalha.
+*   Perfeito para dados que precisam ser acessados *muito rapidamente* e que podem crescer *muito*:
+    *   `EventosDeJogo`: Um registro de tudo o que acontece (chefe derrotado, item encontrado, etc.).
+    *   `RankingChefesDerrotados`: Uma tabela para mostrar quantos chefes cada jogador derrotou.
 
-### 2.6. Mensageria (Kafka): O Ônibus de Batalha dos Dados! 🚌
+### 2.6. Mensageria (Kafka): O Corcel Espectral dos Dados! 🐎
 
-*   Usamos o Kafka para comunicação *assíncrona* entre os serviços.  Isso significa que os serviços não precisam esperar uns pelos outros para realizar suas tarefas.
-*   **Tópicos:**  Como diferentes *rotas* que os dados podem seguir:
-    *   `compra_item`
-    *   `desafio_completo`
-    *   `nivel_passe_batalha`
-    *    `login`
+*   Usamos o Kafka para comunicação *assíncrona* entre os serviços. É como se os serviços enviassem mensagens uns aos outros em vez de falar diretamente.
+*   **Tópicos:**  Como diferentes *caminhos* que as mensagens podem seguir:
+    *   `chefe_derrotado`
+    *   `item_encontrado`
+    *   `item_equipado`
+    *   `personagem_criado`
+    *   `login`
     *   `logout`
 
-## 3. Justificativa da Escolha dos Bancos de Dados: Escolhendo as Ferramentas Certas! 🤔
+## 3. Justificativa da Escolha dos Bancos de Dados: Cada Tesouro em Seu Lugar! 🗺️
 
-*   **PostgreSQL:** Precisamos de *confiança* e *integridade* para os dados principais (jogadores, itens, inventário). O PostgreSQL, com sua natureza transacional, é como um cofre forte para esses dados.
+*   **PostgreSQL:** Precisamos de *confiança* e *integridade* para os dados principais (jogadores, personagens, chefes, itens). O PostgreSQL é como um cofre forte para esses dados.
 
-*   **MongoDB:** Para dados que mudam com frequência (loja diária, eventos), precisamos de *flexibilidade*. O MongoDB, com sua estrutura de documentos, é como uma mochila que se adapta a diferentes cargas.
+*   **MongoDB:** Para dados que precisam de mais *flexibilidade* (descrições detalhadas), o MongoDB é perfeito. Ele é como uma biblioteca onde cada livro pode ter um formato diferente.
 
-*   **Cassandra:** Quando o assunto é *velocidade* e *escala*, o Cassandra entra em ação. Ele é perfeito para dados que crescem rapidamente e precisam ser acessados com frequência (estatísticas, logs).
+*   **Cassandra:** Quando o assunto é *velocidade* e *escala*, o Cassandra é imbatível. Ele é ideal para registrar eventos e gerar rankings.
 
-## 4. Configuração do Ambiente: Preparando o Terreno! 🗺️
+## 4. Configuração do Ambiente: Preparando Sua Jornada! 🧭
 
-Usaremos Docker e Docker Compose para criar um ambiente de desenvolvimento *consistente* e *fácil de configurar*.  É como ter um *kit de construção* pronto para usar!
+Vamos usar Docker e Docker Compose para criar um ambiente de desenvolvimento *consistente* e *fácil de configurar*. É como ter um mapa do tesouro que te leva direto ao código!
 
 1.  **Instale Docker e Docker Compose:**
     *   Docker: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
     *   Docker Compose: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
 2.  **Clone o Repositório (se você tiver acesso a ele):**
-
     ```bash
     git clone <URL_do_repositorio>
     cd <nome_da_pasta_do_repositorio>
     ```
 
-3.  **Execute o Docker Compose (isso vai construir e iniciar tudo!):**
-
+3.  **Execute o Docker Compose (isso vai preparar tudo!):**
     ```bash
     docker-compose up -d
     ```
 
-## 5. Estrutura do Projeto: Organizando o Inventário! 🗂️
+## 5. Estrutura do Projeto: O Inventário do Código! 🎒
 
 ```markdown
-fortnite_project/
+elden_ring_project/
 ├── app/
 │   ├── api/                 # Código da API (FastAPI)
 │   │   ├── __init__.py
@@ -155,8 +146,8 @@ fortnite_project/
 │   │   ├── routers/         # Rotas (endpoints)
 │   │   │   ├── __init__.py
 │   │   │   ├── users.py     # Rotas para usuários
-│   │   │   ├── shop.py      # Rotas para a loja
-│   │   │   └── ...
+│   │   │   ├── characters.py   # Rotas para personagens
+│   │   │   └── ...          # Outras rotas
 │   │   └── models.py        # Modelos Pydantic
 │   ├── db/                  # Interação com bancos de dados
 │   │   ├── __init__.py
@@ -165,24 +156,26 @@ fortnite_project/
 │   │   └── cassandra.py     # Funções para Cassandra
 │   ├── services/            # Lógica de negócio (S1, S2, S3)
 │   │   ├── __init__.py
-│   │   ├── user_service.py  # Serviço para usuários (S1)
-│   │   ├── shop_service.py  # Serviço para a loja (S1)
-│   │   ├── message_consumer.py # Serviço consumidor (S2)
-│   │   └── validation_service.py # Serviço de validação e logs (S3)
+│   │   ├── user_service.py      # Serviço de usuários (S1)
+│   │   ├── character_service.py # Serviço de personagens (S1)
+│   │   ├── boss_service.py      # Serviço de chefes (S1)
+│   │   ├── item_service.py      # Serviço de itens (S1)
+│   │   ├── message_consumer.py  # Serviço consumidor (S2)
+│   │   └── validation_service.py # Serviço de validação/logs (S3)
 │   ├── core/                # Configurações e utilitários
 │   │   ├── __init__.py
 │   │   ├── config.py        # Configurações
 │   │   └── kafka_producer.py # Produtor Kafka genérico
 │   └── schemas/             # Schemas SQL
 │       ├── __init__.py
-│       ├── fortnite.sql
+│       ├── elden_ring.sql     # Schema do PostgreSQL
 │       └── ...
 ├── docker-compose.yml       # Arquivo Docker Compose
 ├── pyproject.toml           # Configuração do Poetry (ou requirements.txt)
 └── README.md                # Este arquivo
 ```
 
-## 6. Instalação de Dependências (com Poetry): Equipando-se para a Batalha! 🛡️
+## 6. Instalação de Dependências (com Poetry): Fortalecendo Suas Armas! 💪
 
 1.  **Instale Poetry:**
 
@@ -196,9 +189,9 @@ fortnite_project/
     poetry install
     ```
 
-    (Se você preferir usar `pip` e `requirements.txt`, use `pip install -r requirements.txt`)
+    (Se preferir usar `pip` e `requirements.txt`, use `pip install -r requirements.txt`)
 
-## 7. Execução do Projeto: Entrando no Ônibus de Batalha! 🚌
+## 7. Execução do Projeto: Rumo à Grande Árvore Térrea! 🌳
 
 1.  **Verifique se os Contêineres Docker Estão Rodando:**
 
@@ -214,7 +207,7 @@ fortnite_project/
 
 3.  **Inicie os Consumidores Kafka (S2 e S3):**
 
-    Abra *dois* terminais separados (e *ative o ambiente virtual* se você estiver usando um):
+    Abra *dois* terminais separados (e *ative o ambiente virtual* se estiver usando um):
 
     *   **Terminal 1 (S2):**
         ```bash
@@ -236,9 +229,9 @@ fortnite_project/
 
     O `--reload` é útil durante o desenvolvimento, pois a API reinicia automaticamente sempre que você modifica o código.
 
-## 8. Interação com o Projeto (Simulação): A Hora do Show! 🎮
+## 8. Interação com o Projeto (Simulação): Testando Suas Habilidades! ⚔️
 
-Como este projeto *não tem a jogabilidade* de Fortnite, você precisará simular as ações dos jogadores. Faça isso enviando requisições HTTP para a API. Você pode usar ferramentas como:
+Como este projeto *não tem a jogabilidade* de Elden Ring, você precisará simular as ações dos jogadores. Faça isso enviando requisições HTTP para a API. Você pode usar ferramentas como:
 
 *   **Postman:** Uma ferramenta gráfica para testar APIs.
 *   **Insomnia:** Outra ferramenta gráfica, similar ao Postman.
@@ -254,37 +247,52 @@ Como este projeto *não tem a jogabilidade* de Fortnite, você precisará simula
 
         ```json
         {
-          "username": "jogador123",
-          "email": "jogador@example.com",
-          "password": "senhaSegura"
+          "username": "maculado123",
+          "email": "maculado@example.com",
+          "password": "senhaForte"
         }
         ```
 
-*   **Comprar Item:**
+*   **Criar Personagem:**
     *   Método: `POST`
-    *   Endpoint: `/shop/buy` (você precisará criar este endpoint!)
+    *   Endpoint: `/characters/` (você precisará criar este endpoint!)
     *   Corpo (JSON):
 
         ```json
         {
           "user_id": 1,
-          "item_id": 25
+          "nome": "Cavaleiro da Noite",
+          "classe": "Cavaleiro"
         }
         ```
 
-*   **Listar Inventário:**
+* **Registrar Chefe Derrotado:**
+    *   Método: `POST`
+    *   Endpoint: `/bosses/defeat`
+    *   Corpo (JSON):
+
+        ```json
+        {
+          "personagem_id": 1,
+          "chefe_id": 3
+        }
+        ```
+
+*   **Listar Chefes Derrotados por um Personagem:**
     *   Método: `GET`
-    *   Endpoint: `/inventory/{user_id}` (você precisará criar este endpoint!)
+    *   Endpoint: `/characters/{personagem_id}/bosses` (você precisará criar este endpoint!)
 
-Você precisará criar *scripts* (em Python ou outra linguagem) para automatizar essas requisições e simular diferentes cenários (muitos jogadores comprando itens ao mesmo tempo, completando desafios, etc.).
+Você precisará criar *scripts* (em Python ou outra linguagem) para automatizar essas requisições e simular diferentes cenários.
 
-## 9. Próximos Passos e Melhorias: Evoluindo o Projeto! 📈
+## 9. Próximos Passos e Melhorias: Rumo à Perfeição! 🏆
 
-*   **Implementar os Serviços Restantes (S1):** Terminar a lógica dos serviços que ainda não foram completamente implementados.
-*   **Implementar a Lógica de Validação do S3:** Adicionar a lógica de validação ao `validation_service.py`, conectando-se aos bancos de dados.
-*   **Tratamento de Erros Robusto:** Adicionar tratamento de erros adequado em *todos* os componentes (não apenas `print("Erro!")`).
-*   **Testes, Testes, Testes!:** Escrever testes *unitários* (para funções individuais) e de *integração* (para testar a interação entre os componentes).
+*   **Implementar os Serviços Restantes (S1):** Terminar a lógica dos serviços.
+*   **Implementar a Lógica de Validação do S3:** Adicionar a lógica de validação ao `validation_service.py`.
+*   **Tratamento de Erros Robusto:** Adicionar tratamento de erros em *todos* os componentes.
+*   **Testes, Testes, Testes!:** Escrever testes *unitários* e de *integração*.
 *   **Autenticação e Autorização:** Adicionar segurança à API (JWT, OAuth 2.0, etc.). *Nunca* armazene senhas em texto plano!
 *   **Simulação Mais Realista:** Criar scripts de simulação que imitem melhor o comportamento dos jogadores.
-*   **Adicionar Outras Funcionalidades:** Que tal presentes entre jogadores? Um sistema de amigos?
-*   **Escalabilidade (Avançado):** Se você quiser levar o projeto *muito* a sério, pode investigar técnicas para lidar com um grande número de usuários e requisições.
+*   **Adicionar Outras Funcionalidades:** Que tal um sistema de níveis para os personagens? Ou um mapa (mesmo que em texto)?
+*   **Escalabilidade (Avançado):** Se você quiser se aprofundar, pode investigar técnicas para lidar com muitos usuários e requisições.
+
+Que a graça te guie, Maculado! E divirta-se construindo este projeto! ✨
