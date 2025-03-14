@@ -287,10 +287,8 @@ Você precisará criar *scripts* (em Python ou outra linguagem) para automatizar
 *   **Implementar os Serviços Restantes (S1):** Terminar a lógica dos serviços.
 *   **Implementar a Lógica de Validação do S3:** Adicionar a lógica de validação ao `validation_service.py`.
 *   **Tratamento de Erros Robusto:** Adicionar tratamento de erros em *todos* os componentes.
-*   **Testes, Testes, Testes!:** Escrever testes *unitários* e de *integração*.
+*   **Testes:** Escrever testes *unitários* e de *integração*.
 *   **Autenticação e Autorização:** Adicionar segurança à API (JWT, OAuth 2.0, etc.). *Nunca* armazene senhas em texto plano!
-*   **Simulação Mais Realista:** Criar scripts de simulação que imitem melhor o comportamento dos jogadores.
-*   **Adicionar Outras Funcionalidades:** Que tal um sistema de níveis para os personagens? Ou um mapa (mesmo que em texto)?
-*   **Escalabilidade (Avançado):** Se você quiser se aprofundar, pode investigar técnicas para lidar com muitos usuários e requisições.
 
-Que a graça te guie, Maculado! E divirta-se construindo este projeto! ✨
+
+Que a graça te guie, Maculado!✨
