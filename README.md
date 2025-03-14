@@ -125,7 +125,7 @@ Vamos usar Docker e Docker Compose para criar um ambiente de desenvolvimento *co
 2.  **Clone o Repositório (se você tiver acesso a ele):**
     ```bash
     git clone https://github.com/GabrielBalbine/CC6240_PJ.git
-    cd <nome_da_pasta_do_repositorio>
+    cd CC6240_PJ
     ```
 
 3.  **Execute o Docker Compose (isso vai preparar tudo!):**
