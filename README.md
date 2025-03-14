@@ -2,7 +2,7 @@
 
 [![Elden Ring Logo](https://cdn11.bigcommerce.com/s-k0hjo2yyrq/images/stencil/1280x1280/products/1106/4307/Elden_Ring_Standard_Edition_Product_Banner__89855.1726738824.jpg?c=1)](https://www.eldenring.com/)
 
-Saudações, Maculado! Bem-vindo ao projeto **Elden Ring Simplified**! Prepare-se para explorar as Terras Intermédias... *mas sem morrer (muito)!* 😉
+Saudações, Maculado! Bem-vindo ao projeto **Elden Ring Database**! Prepare-se para explorar as Terras Intermédias... *mas sem morrer (muito)!* 😉
 
 ## O Que é Este Projeto? 🤔
 
