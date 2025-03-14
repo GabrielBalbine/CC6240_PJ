@@ -15,8 +15,6 @@ Este é um projeto *educacional* que usa elementos de Elden Ring para criar um s
 
 A ideia principal é aprender como construir sistemas de software usando diferentes tipos de bancos de dados e um sistema de mensagens (como se fosse um "WhatsApp" para os diferentes pedaços do programa se comunicarem). É como aprender a forjar armas e armaduras, mas para *código*!
 
-**Importante:** Este projeto é para *desenvolvedores* (ou aspirantes a desenvolvedores) aprenderem na prática. Ele *não* é um jogo completo, e *não* tem a jogabilidade de Elden Ring.
-
 ## 1. Tecnologias Utilizadas: Seu Arsenal de Desenvolvimento! ⚒️
 
 *   **Linguagem Principal:** Python 🐍 (versátil como a Espada Reta!)
