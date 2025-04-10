@@ -1,4 +1,4 @@
-# 🔫 CoDd: Projeto de Persistência Poliglota e Mensageria 🎖️
+# 🔫 CoD: Projeto de Persistência Poliglota e Mensageria 🎖️
 
 [![CoD Logo](https://4kwallpapers.com/images/walls/thumbs_3t/19093.jpeg)](https://www.callofduty.com/)
 
