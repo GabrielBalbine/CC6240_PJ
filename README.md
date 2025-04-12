@@ -175,7 +175,7 @@ cod_project/
 ├── pyproject.toml           # Configuração do Poetry (ou requirements.txt)
 └── README.md                # Este arquivo
 ```
-## 6. Instalação de Dependências (com Poetry): Carregando Sua Munição! 弾
+## 6. Instalação de Dependências (com Poetry) 弾:
 
 1.  **Instale Poetry:**
 
@@ -191,7 +191,7 @@ cod_project/
 
     (Se preferir usar `pip` e `requirements.txt`, use `pip install -r requirements.txt`)
 
-## 7. Execução do Projeto: Entrando em Ação! 🏃‍♂️
+## 7. Execução do Projeto 🏃‍♂️:
 
 1.  **Verifique se os Contêineres Docker Estão Rodando:**
 
