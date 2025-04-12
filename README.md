@@ -254,7 +254,7 @@ cod_project/
 
 *   **Criar Loadout:**
     *   Método: `POST`
-    *   Endpoint: `/loadouts/` (você precisará criar este endpoint!)
+    *   Endpoint: `/loadouts/` 
     *   Corpo (JSON):
 
         ```json
