@@ -1,0 +1,9 @@
+FROM python:3.9
+
+WORKDIR /app
+
+COPY s3_teste.py /app
+
+RUN pip install kafka-python faker boto3
+
+CMD [ "python", "s3_teste.py" ]
