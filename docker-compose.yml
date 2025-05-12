@@ -32,4 +32,18 @@ services:
       dockerfile: Dockerfile.producer
     depends_on:
       - kafka
-    
+  consumer:
+    container_name: consumer
+    build:
+      context: ./services/s2
+      dockerfile: Dockerfile.consumer
+    depends_on:
+      - kafka
+      - postgres
+      - cassandra
+      - mongo
+
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
