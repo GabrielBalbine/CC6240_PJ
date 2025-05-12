@@ -43,7 +43,19 @@ services:
       - cassandra
       - mongo
 
-  mongodb:
+  mongo:
     image: 'bitnami/mongodb:latest'
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+      - MONGODB_PASSWORD=nil
+      - MONGODB_USERNAME=nil
+  postgres:
+    image: 'bitnami/postgresql:latest'
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=nil
+
+  cassandra:
+    image: 'bitnami/cassandra:latest'
+    environment:
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=cassandra
