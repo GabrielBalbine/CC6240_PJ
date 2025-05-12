@@ -92,7 +92,6 @@ for payload in consumer:
             cursor.close()
 
         elif servico == "servico_arma":
-            # Vai para Cassandra
             if tipo == "desbloqueio_de_arma":
                 cassandra_session.execute("""
                     INSERT INTO armas (arma_id, arma_name, tipo_arma, nivel_desbloqueio, timestamp)
@@ -106,7 +105,6 @@ for payload in consumer:
                 ))
 
         elif servico in ["servico_classe", "servico_progresso"]:
-            # Vai para MongoDB
             if servico == "servico_classe":
                 collection = mongo_db['loadouts']
             else:
