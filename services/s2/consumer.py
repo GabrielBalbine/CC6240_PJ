@@ -51,7 +51,7 @@ def conexao_postgress():
         print(f"Erro ao conectar ao PostgreSQL: {e}")
         return None
     
-for _ in range(5):
+for _ in range(50):
     postgres_conn = conexao_postgress()
     cassandra_session = conexao_cassandra()
     mongo_db = conexao_mongodb()

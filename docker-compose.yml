@@ -44,15 +44,44 @@ services:
       - mongo
 
   mongo:
-    image: 'bitnami/mongodb:latest'
+    image: 'mongo'
+    restart: always
+    ports:
+    - 27017:27017
     environment:
-      - MONGODB_PASSWORD=nil
-      - MONGODB_USERNAME=nil
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: admin
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+    depends_on:
+      - mongo
+    
   postgres:
-    image: 'bitnami/postgresql:latest'
+    image: postgres
+    restart: always
+    ports: 
+      - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=postgres
-      - POSTGRESQL_PASSWORD=nil
+      POSTGRES_PASSWORD: root
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'gui67785@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: teste
+    ports:
+      - 16543:80
+    depends_on: 
+      - postgres
 
   cassandra:
     image: 'bitnami/cassandra:latest'

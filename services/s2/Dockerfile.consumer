@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY consumer.py /app
 
-RUN pip install kafka-python pymongo psycopg2-binary faker cassandra-driver
+RUN pip install kafka-python pymongo psycopg2-binary faker cassandra-driver uuid
 
 CMD [ "python", "consumer.py" ]
