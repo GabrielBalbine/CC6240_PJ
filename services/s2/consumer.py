@@ -44,7 +44,7 @@ def conexao_postgress():
             host="postgres",
             database="cod_db",
             user="postgres",
-            password="postgres"
+            password="root"
         )
         return conn
     except Exception as e:
