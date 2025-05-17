@@ -41,10 +41,11 @@ def conexao_cassandra():
 def conexao_postgress():
     try:
         conn = psycopg2.connect(
-            host="postgres",
+            host="localhost",
             database="cod_db",
             user="postgres",
-            password="root"
+            password="root",
+            port="5432"
         )
         return conn
     except Exception as e:

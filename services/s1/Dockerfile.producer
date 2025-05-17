@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY producer.py /app
 
-RUN pip install kafka-python faker
+RUN pip install kafka-python faker 
 
 CMD [ "python", "producer.py" ]

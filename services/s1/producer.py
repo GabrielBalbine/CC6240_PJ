@@ -2,6 +2,7 @@
 
 from kafka import KafkaProducer
 from faker import Faker
+from kafka.errors import NoBrokersAvailable
 import time
 import json
 import random
@@ -9,11 +10,17 @@ import random
 fake = Faker()
 
 ## Criação do produtor
-producer = KafkaProducer(
-    bootstrap_servers='kafka:9092',
-    api_version=(3,8,0),
-    value_serializer=lambda v: json.dumps(v).encode('utf-8')
-)
+while True:
+    try:
+        producer = KafkaProducer(
+            bootstrap_servers='kafka:9092',
+            api_version=(3,8,0),
+            value_serializer=lambda v: json.dumps(v).encode('utf-8')
+        )
+        break
+    except NoBrokersAvailable:
+        print("Aguardando Kafka estar disponível...")
+        time.sleep(5)
 
 
 armas = {
@@ -117,7 +124,7 @@ def gerar_mensagem_arma():
         }
 
 def gerar_mensagem_loadout():
-    tipo_msg = random.choice(["criacao_loadout", "atualilzacao_loadout", "deletar_loadout"])
+    tipo_msg = random.choice(["criacao_loadout", "atualizacao_loadout", "deletar_loadout"])
     loadout_name = random.choice(["Assault", "Sniper", "Stealth", "CQB", "Support"])
     
     if tipo_msg == "criacao_loadout":
@@ -135,7 +142,7 @@ def gerar_mensagem_loadout():
             },
             "timestamp": fake.date_time().isoformat()
         }
-    elif tipo_msg == "atualilzacao_loadout":
+    elif tipo_msg == "atuailzacao_loadout":
         return {
             "servico": "servico_classe",
             "tipo": tipo_msg,
@@ -214,7 +221,7 @@ if __name__ == '__main__':
     topic = 'Dados_Cod'
 
     while True:
-        data = gerarMsg()
-        print(data)
-        producer.send(topic, value=data)
+        body = gerarMsg()
+        print(body)
+        producer.send(topic, value=body)
         time.sleep(1)
