@@ -10,18 +10,28 @@ import random
 fake = Faker()
 
 ## Criação do produtor
-while True:
-    try:
-        producer = KafkaProducer(
-            bootstrap_servers='kafka:9092',
-            api_version=(3,8,0),
-            value_serializer=lambda v: json.dumps(v).encode('utf-8')
-        )
-        break
-    except NoBrokersAvailable:
-        print("Aguardando Kafka estar disponível...")
-        time.sleep(5)
+## producer = KafkaProducer(
+##     bootstrap_servers='kafka:9092',
+##     api_version=(3,8,0),
+##     value_serializer=lambda v: json.dumps(v).encode('utf-8')
+## )
 
+def criar_producer(max_tentativas=10, intervalo=5):
+    for tentativa in range(max_tentativas):
+        try:
+            producer = KafkaProducer(
+                bootstrap_servers='kafka:9092',
+                api_version=(3, 8, 0),
+                value_serializer=lambda v: json.dumps(v).encode('utf-8')
+            )
+            print("Kafka disponível. Produtor criado com sucesso.")
+            return producer
+        except NoBrokersAvailable as e:
+            print(f"[Tentativa {tentativa + 1}/{max_tentativas}] Kafka indisponível. Tentando novamente em {intervalo} segundos...")
+            time.sleep(intervalo)
+    raise Exception("Não foi possível conectar ao Kafka após várias tentativas.")
+
+producer = criar_producer()
 
 armas = {
     "riflesDeAssalto": ["M4A1", "Kilo 141", "AK-47", "RAM-7", "Grau 5.56"],
