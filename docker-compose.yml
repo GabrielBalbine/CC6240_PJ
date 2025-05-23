@@ -35,6 +35,7 @@ services:
       - kafka
   consumer:
     container_name: consumer
+    restart: always
     build:
       context: ./services/s2
       dockerfile: Dockerfile.consumer
