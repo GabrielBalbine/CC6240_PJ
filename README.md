@@ -33,10 +33,9 @@ A missão principal aqui é aprender a construir sistemas usando diferentes tipo
     *   `psycopg2-binary`: Conexão com PostgreSQL.
     *   `pymongo`: Conexão com MongoDB.
     *   `cassandra-driver`: Conexão com Cassandra.
-    *   `confluent-kafka`: Cliente Kafka para Python.
-    *   `uvicorn`: Servidor ASGI para executar a API FastAPI.
-    *   `pydantic`: Validação de dados e configurações.
-    *   `logging`: Para gerar logs detalhados.
+    *   `kafka-pyhon`: Kafka para Python.
+    *   `faker`: Para gerar dados aleatórios.
+    *   `uuid`: Para gerar ID's para dados aleatórios junto do faker.
 
 ## 2. Arquitetura 🗺️:
 
@@ -63,12 +62,6 @@ Esses serviços executam as ações principais e *produzem* mensagens para o Kaf
     *   Registra *tudo* em logs detalhados para análise e depuração.
     *   *Poderia* enviar os logs para o Elasticsearch para análises avançadas de desempenho e uso.
 
-### 2.4. API (FastAPI) 🕹️:
-
-*   A API é a *interface* para interagir com o sistema.
-*   Ela oferece *endpoints* (URLs) para realizar ações (registrar jogador, criar loadout, etc.).
-*   Usa o FastAPI, um framework Python moderno e *eficiente*!
-*   Usa modelos Pydantic para garantir que os dados estejam sempre corretos.
 
 ### 2.5. Bancos de Dados🗄️:
 
@@ -76,37 +69,26 @@ Esses serviços executam as ações principais e *produzem* mensagens para o Kaf
 
 *   Ideal para dados *estruturados* e seus *relacionamentos*:
     *   `Jogadores`: Informações dos jogadores.
-    *   `Armas`: Detalhes das armas base.
-    *   `JogadorArma`: Quais armas cada jogador desbloqueou.
-    *   `Loadouts`: Os loadouts criados pelos jogadores.
-    *   `LoadoutArma`: As armas específicas dentro de cada loadout.
-    *   `AnexosArma`: Os anexos disponíveis.
-    *   `ArmaAnexo`: Quais anexos podem ser usados em quais armas.
-    *   `LoadoutArmaAnexo`: Quais anexos estão equipados em cada arma de um loadout.
+        *   `username` , `email`, `registration_date`, `platarform` e `region`
 
 #### 2.5.2. MongoDB (Documento) 📋:
 
 *   Bom para dados *flexíveis* ou mais descritivos:
     *   `EstatisticasArmaDetalhada`: Estatísticas de uso (tiros, baixas, etc.), que podem ter campos adicionados.
-    *   `NoticiasCoD`: Atualizações e notícias sobre o jogo (fictício).
+    *   `Loadout's`: Loadouts possíveis com cada arma.
 
 #### 2.5.3. Cassandra (Wide-Column) ⏱️:
 
 *   Perfeito para dados acessados *rapidamente* e que *crescem constantemente*:
     *   `LogEventosJogador`: Registro de ações importantes (arma desbloqueada, nível subiu, loadout criado).
-    *   `RankingNivelJogador`: Classificação dos jogadores por nível.
 
 ### 2.6. Mensageria (Kafka) 📻:
 
 *   Usamos o Kafka para comunicação *assíncrona*. Serviços enviam mensagens sem esperar resposta imediata.
-*   **Tópicos:** Canais de comunicação específicos:
-    *   `arma_desbloqueada` (Pode levar a updates no PostgreSQL e Cassandra via S2)
-    *   `loadout_criado` (Pode levar a updates no PostgreSQL e Cassandra via S2)
-    *   `loadout_editado` (Pode levar a updates no PostgreSQL e Cassandra via S2)
-    *   `nivel_subiu` (Pode levar a updates no PostgreSQL e Cassandra via S2)
-    *   `login` (Pode levar a updates no Cassandra via S2)
-    *   `logout` (Pode levar a updates no Cassandra via S2)
-    *   `stats_arma_atualizada` (Pode levar a updates no MongoDB via S2)
+*   **Tópico:s** Canais de Comunicação Específicos:
+    *   **Dados_Cod**: Responsável por distribuir os dados e popular os bancos de dados
+    *   **Log_DB**: Responsável por retornar ao serviço S3 que o banco foi populado com sucesso
+    *   **Log_MSG**: Responsável por retornar ao serviço S3 que os mensagens foram enviadas S1 para S2 
 
 ## 3. Justificativa da Escolha dos Bancos de Dados 🎯:
 
@@ -138,42 +120,27 @@ Usaremos Docker e Docker Compose para criar um ambiente de desenvolvimento *cons
 ## 5. Estrutura do Projeto 🗂️:
 
 ```markdown
-cod_project/
+CC6240_PJ/
 ├── app/
-│   ├── api/                 # Código da API (FastAPI)
-│   │   ├── __init__.py
-│   │   ├── main.py          # Ponto de entrada
-│   │   ├── routers/         # Rotas (endpoints)
-│   │   │   ├── __init__.py
-│   │   │   ├── users.py     # Rotas para jogadores
-│   │   │   ├── weapons.py   # Rotas para armas
-│   │   │   ├── loadouts.py  # Rotas para loadouts
-│   │   │   └── ...
-│   │   └── models.py        # Modelos Pydantic
-│   ├── db/                  # Interação com bancos de dados
-│   │   ├── __init__.py
-│   │   ├── postgres.py      # Funções para PostgreSQL
-│   │   ├── mongo.py         # Funções para MongoDB
-│   │   └── cassandra.py     # Funções para Cassandra
-│   ├── services/            # Lógica de negócio (S1, S2, S3)
-│   │   ├── __init__.py
-│   │   ├── user_service.py      # Serviço de jogadores (S1)
-│   │   ├── weapon_service.py    # Serviço de armas (S1)
-│   │   ├── loadout_service.py   # Serviço de loadouts (S1)
-│   │   ├── progression_service.py # Serviço de progressão (S1)
-│   │   ├── message_consumer.py  # Serviço consumidor (S2)
-│   │   └── validation_service.py # Serviço de validação/logs (S3)
-│   ├── core/                # Configurações e utilitários
-│   │   ├── __init__.py
-│   │   ├── config.py        # Configurações
-│   │   └── kafka_producer.py # Produtor Kafka genérico
-│   └── schemas/             # Schemas SQL
-│       ├── __init__.py
-│       ├── cod_schema.sql     # Schema do PostgreSQL
-│       └── ...
-├── docker-compose.yml       # Arquivo Docker Compose
-├── pyproject.toml           # Configuração do Poetry (ou requirements.txt)
-└── README.md                # Este arquivo
+│   ├── services/
+│ ├── s1/
+│ │ ├── Dockerfile.producer
+│ │ ├── kafkaIsReady.sh
+│ │ └── producer.py
+│ │
+│ ├── s2/
+│ │ ├── consumer.py
+│ │ ├── consumidor_teste.py
+│ │ └── Dockerfile.consumer
+│ │
+│ └── s3/
+│ ├── Dockerfile.producer
+│ ├── s3_logica.py
+│ └── s3_teste.py
+│
+├── docker-compose.yml
+├── PJ DB.code-workspace
+└── README.md # Esse arquivo
 ```
 ## 6. Instalação de Dependências (com Poetry) 弾:
 
