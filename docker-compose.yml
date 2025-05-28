@@ -86,7 +86,10 @@ services:
       - postgres
 
   cassandra:
-    image: 'bitnami/cassandra:latest'
+    image: cassandra:latest
+    container_name: cassandra-container
+    ports:
+      - "9042:9042"
     environment:
-      - CASSANDRA_USER=cassandra
-      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_USER=admin
+      - CASSANDRA_PASSWORD=admin
