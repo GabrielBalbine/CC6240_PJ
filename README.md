@@ -25,8 +25,7 @@ A missão principal aqui é aprender a construir sistemas usando diferentes tipo
     *   MongoDB (Documento): Para dados mais flexíveis, como estatísticas detalhadas de armas ou notícias.
     *   Cassandra (Wide-Column): Para dados que precisam de acesso *rápido* e podem crescer *muito*, como logs de eventos (arma desbloqueada, nível subiu).
 *   **Mensageria:** Kafka 📻
-*   **API:** FastAPI 🛰️
-*   **Gerenciamento de Dependências:** Poetry (ou pip, se preferir)
+*   **Gerenciamento de Dependências:** pip
 *   **Containerização:** Docker e Docker Compose 📦
 
 *   **Bibliotecas Python:**
