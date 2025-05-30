@@ -25,7 +25,6 @@ A missão principal aqui é aprender a construir sistemas usando diferentes tipo
     *   MongoDB (Documento): Para dados mais flexíveis, como estatísticas detalhadas de armas ou notícias.
     *   Cassandra (Wide-Column): Para dados que precisam de acesso *rápido* e podem crescer *muito*, como logs de eventos (arma desbloqueada, nível subiu).
 *   **Mensageria:** Kafka 📻
-*   **Gerenciamento de Dependências:** pip
 *   **Containerização:** Docker e Docker Compose 📦
 
 *   **Bibliotecas Python:**
@@ -51,16 +50,15 @@ Esses serviços executam as ações principais e *produzem* mensagens para o Kaf
 
 ### 2.2. Serviço Consumidor (S2 - Consumidor/Processador) 🧠:
 
-*   `message_consumer`: Este serviço *intercepta* as mensagens do Kafka e atualiza os bancos de dados corretos. Ele processa a inteligência recebida! Atua como um *único serviço* lendo de múltiplos tópicos e direcionando para PostgreSQL, MongoDB ou Cassandra.
+*   `consumer`: Este serviço *intercepta* as mensagens do Kafka e atualiza os bancos de dados corretos. Ele processa a inteligência recebida! Atua como um *único serviço* lendo de múltiplos tópicos e direcionando para PostgreSQL, MongoDB ou Cassandra.
+*    É responsável por fazer consultas dentro dos bancos de dados para verificar se as mensagens estão sendo passadas corretamente
 
 ### 2.3. Serviço de Validação/Logs (S3 - Consumidor) 📝:
 
-*   `validation_service`: Este serviço é o nosso *auditor* e *analista de desempenho*!
-    *   Ele *escuta* todas as mensagens do Kafka.
+*   `validator`: Este serviço é o nosso *auditor* e *analista de desempenho*!
+    *   Ele *escuta* todas as mensagens do Kafka e do S1.
     *   Verifica se os dados estão *consistentes* em todos os bancos após uma ação.
-    *   Registra *tudo* em logs detalhados para análise e depuração.
-    *   *Poderia* enviar os logs para o Elasticsearch para análises avançadas de desempenho e uso.
-
+    *   Registra a quantidade de dados nas tabelas em logs para análise e depuração.
 
 ### 2.5. Bancos de Dados🗄️:
 
@@ -74,7 +72,6 @@ Esses serviços executam as ações principais e *produzem* mensagens para o Kaf
 
 *   Bom para dados *flexíveis* ou mais descritivos:
     *   `EstatisticasArmaDetalhada`: Estatísticas de uso (tiros, baixas, etc.), que podem ter campos adicionados.
-    *   `Loadout's`: Loadouts possíveis com cada arma.
 
 #### 2.5.3. Cassandra (Wide-Column) ⏱️:
 
@@ -104,17 +101,10 @@ Usaremos Docker e Docker Compose para criar um ambiente de desenvolvimento *cons
 1.  **Instale Docker e Docker Compose:**
     *   Docker: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
     *   Docker Compose: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
+    *   Docker Desktop: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/) **(Opcional)**
 
-2.  **Clone este Repositório:**
-    ```bash
-    git clone <URL_DO_SEU_REPOSITORIO>
-    cd cod_project # Ou o nome da sua pasta
-    ```
+2.   **Python**: [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
-3.  **Execute o Docker Compose (isso vai iniciar todos os sistemas!):**
-    ```bash
-    docker-compose up -d
-    ```
 
 ## 5. Estrutura do Projeto 🗂️:
 
@@ -141,123 +131,121 @@ CC6240_PJ/
 ├── PJ DB.code-workspace
 └── README.md # Esse arquivo
 ```
-## 6. Instalação de Dependências (com Poetry) 弾:
 
-1.  **Instale Poetry:**
 
-    ```bash
-    curl -sSL https://install.python-poetry.org | python3 -
-    ```
+## 6. Como Rodar o Projeto 🐳
 
-2.  **Instale as Dependências:**
+### Passo a Passo
 
-    ```bash
-    poetry install
-    ```
+1. Clone o repositório:
+   ```bash
+   git clone <URL_DO_REPO>
+   cd <PASTA_DO_REPO>
+   ```
+2. Construa e suba os containers
+   ```
+   docker-compose up --build
+   ```
 
-    (Se preferir usar `pip` e `requirements.txt`, use `pip install -r requirements.txt`)
+Isso irá:
 
-## 7. Execução do Projeto 🏃‍♂️:
+* Subir o Kafka e o Kafka UI
+* Subir os bancos de dados (PostgreSQL, MongoDB e Cassandra)
+* Subir os microserviços: Producer, Consumer e Validator
+* Expor as interfaces gráficas para monitoramento dos dados
 
-1.  **Verifique se os Contêineres Docker Estão Rodando:**
+### 🔍 Visualização dos Serviços
 
-    ```bash
-    docker-compose ps
-    ```
+### **Kafka Ui**
 
-    Você deve ver os serviços `postgres`, `mongo`, `cassandra`, `zookeeper` e `kafka` listados como `Up`.
+* Acesse em: http://localhost:8080
+* Utilize para monitorar tópicos, mensagens e clusters Kafka.
 
-2.  **Crie as Tabelas/Coleções do Banco de Dados:**
 
-    *   **PostgreSQL:** O script para criar as tabelas é executado *automaticamente* quando você inicia a API (graças a um evento `startup`).
-    *   **Cassandra:** As tabelas são criadas automaticamente pelo código na primeira vez que a conexão é estabelecida.
+### **MongoDB**
 
-3.  **Inicie os Consumidores Kafka (S2 e S3):**
+* Mongo Express: http://localhost:8081
+* Usuário: root
+* Senha: root
 
-    Abra *dois* terminais separados (e *ative o ambiente virtual* se estiver usando um):
+Ou se preferir execute
 
-    *   **Terminal 1 (S2):**
-        ```bash
-        python app/services/message_consumer.py
-        ```
+```bash
+docker exec -it cc6240_pj-mongo-1 mongosh -u root -p root
+```
 
-    *   **Terminal 2 (S3):**
-        ```bash
-        python app/services/validation_service.py
-        ```
+### **PostgreSQL**
 
-4.  **Inicie a API (FastAPI):**
+* Disponível em http://localhost:5432
+* Usuário: postgres
+* Senha: root
 
-    Em outro terminal (e *ative o ambiente virtual*):
+Ou se prefeirr
 
-    ```bash
-    uvicorn app.api.main:app --reload
-    ```
+### PgAdmin 🐘
+* Disponível em http://localhost:16543
+* Email: root@example.com
+* Senha: teste
 
-    O `--reload` é útil durante o desenvolvimento, pois a API reinicia automaticamente sempre que você modifica o código.
 
-## 8. Interação com o Projeto (Simulação) 🎯:
++ Após logar, adicione um novo servidor com os seguintes dados:
+   - Host: postgres
+   - Usuário: postgres
+   - Senha: root
+ 
+### **Cassandra**
 
-*   **Postman:** Uma ferramenta gráfica para testar APIs.
-*   **Insomnia:** Outra ferramenta gráfica, similar ao Postman.
-*   **cURL:** Uma ferramenta de linha de comando.
-*   **Scripts Python:** Usando a biblioteca `requests`.
+* Porta: 9042
+Container: cassandra-container
+Não possui interface web por padrão. Para acesso via linha de comando:
 
-**Exemplos de Requisições:**
+```bash
+docker exec -it cassandra-container cqlsh
+```
 
-*   **Registrar Jogador:**
-    *   Método: `POST`
-    *   Endpoint: `/users/`
-    *   Corpo (JSON):
 
-        ```json
-        {
-          "gamertag": "Soldado123",
-          "email": "soldado@example.com",
-          "password": "senhaUltraSecreta"
-        }
-        ```
+## 7. Estrutura dos Containers 📦
 
-*   **Criar Loadout:**
-    *   Método: `POST`
-    *   Endpoint: `/loadouts/` 
-    *   Corpo (JSON):
+| Serviço       | Porta Local | Função                            |
+| ------------- | ----------- | --------------------------------- |
+| Kafka         | 9092        | Broker de mensagens               |
+| Kafka UI      | 8080        | Visualização do Kafka             |
+| MongoDB       | 27017       | Banco NoSQL                       |
+| Mongo Express | 8081        | Interface para o MongoDB          |
+| PostgreSQL    | 5432        | Banco relacional SQL              |
+| PgAdmin       | 16543       | Interface para o PostgreSQL       |
+| Cassandra     | 9042        | Banco NoSQL (colunar distribuído) |
+| Producer      | -           | Produz mensagens para Kafka       |
+| Consumer      | -           | Consome e grava nos bancos        |
+| Validator     | -           | Verifica e valida os dados        |
 
-        ```json
-        {
-          "jogador_id": 1,
-          "nome_loadout": "Assalto Furtivo",
-          "slot_num": 1,
-          "armas": [
-            {"arma_id": 5, "slot_tipo": "primaria", "anexos": [10, 15]},
-            {"arma_id": 22, "slot_tipo": "secundaria", "anexos": []}
-          ]
-        }
-        ```
 
-*   **Registrar Arma Desbloqueada:**
-    *   Método: `POST`
-    *   Endpoint: `/weapons/unlock` (você precisará criar este endpoint!)
-    *   Corpo (JSON):
 
-        ```json
-        {
-          "jogador_id": 1,
-          "arma_id": 7
-        }
-        ```
 
-*   **Listar Armas Desbloqueadas por um Jogador:**
-    *   Método: `GET`
-    *   Endpoint: `/users/{jogador_id}/weapons` (você precisará criar este endpoint!)
+## 8 Estrutura do projeto 🏗️
 
-## 9. Próximos Passos e Melhorias ⭐
+```
+                                          ---------
+                                --------> |       |
+                                |         | Mongo |
+                                | ------- |       |
+                                | |       ---------
+                                | v
+------      --------------     ------     -------------
+|    |      |            | --> |    | --> |           |
+| S1 | ---> |   kafka    |     | S2 |     | Cassandra |
+|    |      |            | <-- |    | <-- |           |
+------      --------------     ------     -------------
+  |            |                 ^ |
+  |   ------   |                 | |      ------------
+  |   |    |   |                 | -----> |          |
+  --->| S3 |<--|                 |        | Postgres |
+      |    |                     ---------|          |
+      ------                              ------------
+```
 
-*   **Implementar os Serviços Restantes (S1):** Terminar a lógica dos serviços.
-*   **Implementar a Lógica de Validação do S3:** Adicionar a lógica de validação ao `validation_service.py`.
-*   **Tratamento de Erros Robusto:** Adicionar tratamento de erros em *todos* os componentes.
-*   **Testes:** Escrever testes *unitários* e de *integração*.
-*   **Autenticação e Autorização:** Adicionar segurança à API (JWT, OAuth 2.0, etc.). *Nunca* armazene senhas em texto plano!
-*   **Simulação Mais Realista:** Criar scripts de simulação que imitem melhor o comportamento dos jogadores.
-*   **Adicionar Outras Funcionalidades:** Que tal um sistema de *Perks*? Ou estatísticas de partidas (simuladas)?
-*   **Escalabilidade (Avançado):** Investigar técnicas para lidar com muitos jogadores e requisições.
+
+## 9. Possíveis Melhorias ⭐
+
+*    **Volume de dados:** Visando que o projeto é 100% automatizado, quando há um grande volume de dados, pode acontecer da memória dos container ser consumida e travar o projeto
+*    
