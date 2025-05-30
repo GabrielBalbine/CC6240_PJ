@@ -248,4 +248,3 @@ docker exec -it cassandra-container cqlsh
 ## 9. Possíveis Melhorias ⭐
 
 *    **Volume de dados:** Visando que o projeto é 100% automatizado, quando há um grande volume de dados, pode acontecer da memória dos container ser consumida e travar o projeto
-*    
