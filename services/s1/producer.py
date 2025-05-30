@@ -133,47 +133,6 @@ def gerar_mensagem_arma():
             "timestamp": fake.date_time().isoformat()
         }
 
-def gerar_mensagem_loadout():
-    tipo_msg = random.choice(["criacao_loadout", "atualizacao_loadout", "deletar_loadout"])
-    loadout_name = random.choice(["Assault", "Sniper", "Stealth", "CQB", "Support"])
-    
-    if tipo_msg == "criacao_loadout":
-        return {
-            "servico": "servico_classe",
-            "tipo": tipo_msg,
-            "data": {
-                "loadout_id": fake.uuid4(),
-                "player_id": fake.uuid4(),
-                "loadout_name": loadout_name,
-                "primary_arma": random.choice(armas["riflesDeAssalto"] + armas["submetralhadoras"]),
-                "secondary_arma": random.choice(armas["pistolas"]),
-                "perks": [fake.word() for _ in range(3)],
-                "equipamento": [fake.word() for _ in range(2)],
-            },
-            "timestamp": fake.date_time().isoformat()
-        }
-    elif tipo_msg == "atuailzacao_loadout":
-        return {
-            "servico": "servico_classe",
-            "tipo": tipo_msg,
-            "data": {
-                "loadout_id": fake.uuid4(),
-                "loadout_alterado": random.choice(["primary_arma", "secondary_arma", "perks", "equipamento"]),
-                "novo_valor": random.choice(armas["riflesDeAssalto"]) if random.choice([True, False]) else random.choice(armas["pistolas"]),
-            },
-            "timestamp": fake.date_time().isoformat()
-        }
-    else: 
-        return {
-            "servico": "servico_classe",
-            "tipo": tipo_msg,
-            "data": {
-                "loadout_id": fake.uuid4(),
-                "motivo_deletado": random.choice(["replaced", "player_request", "cleanup"]),
-            },
-            "timestamp": fake.date_time().isoformat()
-        }
-
 def gerar_mensagem_progessao():
     tipo_msg = random.choice(["level_up", "progresso_passe", "challenge_completed"])
     
@@ -215,23 +174,35 @@ def gerar_mensagem_progessao():
         }
 
 def gerarMsg():
-    servico = random.choice(["dados_usuario", "servico_arma", "servico_classe", "servico_progresso"])
+    servico = random.choice(["dados_usuario", "servico_arma", "servico_progresso"])
     
     if servico == "dados_usuario":
         return gerar_mensagem_usuario()
     elif servico == "servico_arma":
         return gerar_mensagem_arma()
-    elif servico == "servico_classe":
-        return gerar_mensagem_loadout()
     else: 
         return gerar_mensagem_progessao()
 
 
-if __name__ == '__main__':
-    topic = 'Dados_Cod'
+def enviar_msg(producer,topico_dados, topico_log, body):
+    producer.send(topico_dados, value=body)
+    
+    log_msg = {
+        "servico_origem": body.get("servico"),
+        "tipo": body.get("tipo"),
+        "timestamp_original": body.get("timestamp"),
+        "log_timestamp": fake.date_time().isoformat(),
+        "mensagem_id": fake.uuid4(),  # para rastreamento
+        "descricao": f"Mensagem enviada para o tópico {topico_dados}"
+    }
+    producer.send(topico_log, value=log_msg)
 
-    while True:
+if __name__ == '__main__':
+    topic_dados = 'Dados_Cod'
+    topic_log = 'Log_MSG'
+
+    for i in range(130):
         body = gerarMsg()
         print(body)
-        producer.send(topic, value=body)
+        enviar_msg(producer, topic_dados, topic_log, body)
         time.sleep(1)

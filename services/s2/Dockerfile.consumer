@@ -2,8 +2,8 @@ FROM python:3.9
 
 WORKDIR /app
 
-COPY consumidor_teste.py /app
+COPY consumer.py /app
 
 RUN pip install kafka-python pymongo psycopg2-binary faker cassandra-driver uuid
 
-CMD [ "python", "consumidor_teste.py" ]
+CMD [ "python", "consumer.py" ]

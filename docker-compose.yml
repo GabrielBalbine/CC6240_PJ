@@ -44,6 +44,17 @@ services:
       - postgres
       - cassandra
       - mongo
+  validator:
+    container_name: validator
+    ##restart: always
+    build:
+      context: ./services/s3
+      dockerfile: Dockerfile.validator
+    depends_on:
+      - kafka
+      - postgres
+      - cassandra
+      - mongo
 
   mongo:
     image: 'mongo'
