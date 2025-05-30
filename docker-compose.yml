@@ -89,7 +89,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: 'gui67785@gmail.com'
+      PGADMIN_DEFAULT_EMAIL: 'root@example.com'
       PGADMIN_DEFAULT_PASSWORD: teste
     ports:
       - 16543:80
